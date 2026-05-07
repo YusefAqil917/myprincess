@@ -1,0 +1,419 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --pink: #ff6fad;
+  --hot-pink: #ff3f92;
+  --soft-pink: #ffe4f0;
+  --deep: #472139;
+  --white: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Poppins, Arial, sans-serif;
+  color: var(--deep);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 25%),
+    radial-gradient(circle at bottom right, rgba(255, 105, 180, 0.45), transparent 30%),
+    linear-gradient(135deg, #ffd0e7, #fff4fb 45%, #ffc1dd);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.screen {
+  min-height: 100vh;
+  padding: 42px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeIn 0.7s ease both;
+  position: relative;
+}
+
+.glass-card {
+  width: min(920px, 100%);
+  padding: clamp(24px, 5vw, 52px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 24px 70px rgba(184, 67, 122, 0.22);
+  backdrop-filter: blur(14px);
+}
+
+.hero-card {
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--hot-pink);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0 0 14px;
+  line-height: 1.05;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 8vw, 5.8rem);
+}
+
+h2 {
+  font-size: clamp(2.1rem, 6vw, 4rem);
+}
+
+p {
+  max-width: 680px;
+  margin: 0 auto 18px;
+  font-size: clamp(1rem, 2.4vw, 1.18rem);
+  line-height: 1.65;
+}
+
+.primary-button,
+.secondary-button,
+.ticket {
+  margin-top: 18px;
+  padding: 14px 26px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+  box-shadow: 0 12px 26px rgba(255, 63, 146, 0.32);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.secondary-button {
+  color: var(--hot-pink);
+  background: white;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.ticket:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 34px rgba(255, 63, 146, 0.36);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.floating-hearts {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-hearts span {
+  position: absolute;
+  color: rgba(255, 63, 146, 0.38);
+  font-size: clamp(3rem, 9vw, 8rem);
+  animation: float 4s ease-in-out infinite alternate;
+}
+
+.floating-hearts span:nth-child(1) { left: 7%; top: 10%; animation-delay: 0s; }
+.floating-hearts span:nth-child(2) { right: 10%; top: 14%; animation-delay: 0.5s; }
+.floating-hearts span:nth-child(3) { left: 13%; bottom: 12%; animation-delay: 1s; }
+.floating-hearts span:nth-child(4) { right: 17%; bottom: 10%; animation-delay: 1.5s; }
+.floating-hearts span:nth-child(5) { left: 46%; top: 5%; animation-delay: 2s; }
+
+.photo-grid,
+.mini-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 28px auto;
+}
+
+.photo-grid img,
+.mini-gallery img,
+.cheek-zone img,
+.happy-photo {
+  width: 210px;
+  height: 250px;
+  object-fit: cover;
+  border: 8px solid white;
+  border-radius: 24px;
+  box-shadow: 0 18px 34px rgba(71, 33, 57, 0.22);
+  background: var(--soft-pink);
+}
+
+.photo-grid img:nth-child(1) { transform: rotate(-5deg); }
+.photo-grid img:nth-child(2) { transform: rotate(4deg); }
+.photo-grid img:nth-child(3) { transform: rotate(-2deg); }
+
+.puzzle-board {
+  width: min(520px, 92vw);
+  aspect-ratio: 4 / 5;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 4px;
+  padding: 8px;
+  margin: 26px auto 12px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 18px 36px rgba(71, 33, 57, 0.18);
+}
+
+.puzzle-piece {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  background-size: 400% 500%;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.puzzle-piece.selected {
+  outline: 4px solid var(--hot-pink);
+  transform: scale(0.96);
+}
+
+.hint,
+.feedback-message,
+.small-note {
+  font-size: 0.95rem;
+  opacity: 0.82;
+}
+
+.lyrics-box {
+  width: min(600px, 100%);
+  margin: 26px auto;
+  padding: 24px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+}
+
+.lyrics-box p {
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+input {
+  width: min(430px, 92vw);
+  padding: 14px 20px;
+  border: 2px solid rgba(255, 63, 146, 0.45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--deep);
+  outline: none;
+  text-align: center;
+}
+
+input:focus {
+  border-color: var(--hot-pink);
+  box-shadow: 0 0 0 5px rgba(255, 63, 146, 0.12);
+}
+
+audio {
+  display: block;
+  width: min(420px, 92vw);
+  margin: 20px auto 0;
+}
+
+.kiss-game-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 44px;
+  flex-wrap: wrap;
+  margin: 30px auto;
+}
+
+.kiss-token {
+  font-size: 5rem;
+  cursor: grab;
+  filter: drop-shadow(0 12px 18px rgba(255, 63, 146, 0.35));
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.cheek-zone {
+  padding: 16px;
+  border: 3px dashed var(--pink);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.44);
+}
+
+.cheek-zone span {
+  display: block;
+  margin-top: 10px;
+  color: var(--hot-pink);
+  font-weight: 700;
+}
+
+.success-box,
+.reveal-card,
+.song-reveal {
+  margin-top: 24px;
+}
+
+.happy-photo {
+  width: 240px;
+  height: 260px;
+}
+
+.countdown-card {
+  max-width: 680px;
+}
+
+.big-number {
+  margin-top: 24px;
+  color: var(--hot-pink);
+  font-size: clamp(7rem, 25vw, 14rem);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 16px 34px rgba(255, 63, 146, 0.28);
+}
+
+.tickets-row {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.ticket {
+  min-width: 145px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff, #ffe1ef);
+  color: var(--hot-pink);
+  border: 2px dashed var(--pink);
+}
+
+.ticket.used {
+  background: linear-gradient(135deg, var(--pink), var(--hot-pink));
+  color: white;
+  border-style: solid;
+}
+
+.gift-box {
+  position: relative;
+  width: 230px;
+  height: 210px;
+  margin: 34px auto 10px;
+}
+
+.box-body {
+  position: absolute;
+  left: 20px;
+  bottom: 0;
+  width: 190px;
+  height: 135px;
+  border-radius: 0 0 22px 22px;
+  background: linear-gradient(135deg, #ff6fad, #ff3f92);
+  box-shadow: 0 20px 40px rgba(255, 63, 146, 0.3);
+}
+
+.box-body::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 32px;
+  height: 135px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.box-lid {
+  position: absolute;
+  left: 6px;
+  top: 45px;
+  width: 218px;
+  height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ff8fc3, #ff4c9a);
+  z-index: 2;
+  transition: transform 0.55s ease;
+  transform-origin: left center;
+}
+
+.box-lid::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 32px;
+  height: 58px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.gift-box.open .box-lid {
+  transform: translateY(-72px) rotate(-14deg);
+}
+
+.reveal-card {
+  padding: 26px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 16px 38px rgba(255, 63, 146, 0.22);
+  animation: popIn 0.55s ease both;
+}
+
+.reveal-card h1 {
+  font-size: clamp(2rem, 6vw, 4rem);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  from { transform: translateY(0) rotate(-6deg); }
+  to { transform: translateY(-24px) rotate(6deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 620px) {
+  .glass-card {
+    border-radius: 26px;
+  }
+
+  .photo-grid img,
+  .mini-gallery img {
+    width: 150px;
+    height: 185px;
+  }
+
+  .puzzle-board {
+    gap: 3px;
+  }
+}
