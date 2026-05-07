@@ -1,120 +1,174 @@
-import { useMemo, useState } from "react";
-import confetti from "canvas-confetti";
+import { useEffect, useState } from "react";
 
-const GRID_SIZE = 4;
-const TOTAL_PIECES = 20;
+const GRID_SIZE = 20;
 
-function shuffleArray(array) {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
+function shuffle(array) {
+  const arr = [...array];
+
+  for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return newArray;
+
+  return arr;
 }
 
-function PuzzleBoots({ onNext }) {
-  const solvedPieces = useMemo(
-    () => Array.from({ length: TOTAL_PIECES }, (_, index) => index),
-    []
-  );
+function PuzzleBotas({ onNext }) {
+  const [pieces, setPieces] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [completed, setCompleted] = useState(false);
 
-  const [pieces, setPieces] = useState(() => shuffleArray(solvedPieces));
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [isSolved, setIsSolved] = useState(false);
+  useEffect(() => {
+    resetPuzzle();
+  }, []);
 
-  const checkSolved = (newPieces) => {
-    const solved = newPieces.every((piece, index) => piece === index);
-    if (solved) {
-      setIsSolved(true);
-      confetti({ particleCount: 120, spread: 80, origin: { y: 0.65 } });
-    }
-  };
+  const resetPuzzle = () => {
+    const shuffled = shuffle(
+      Array.from({ length: GRID_SIZE }, (_, i) => i)
+    );
 
-  const swapPieces = (fromIndex, toIndex) => {
-    const newPieces = [...pieces];
-    [newPieces[fromIndex], newPieces[toIndex]] = [
-      newPieces[toIndex],
-      newPieces[fromIndex],
-    ];
-    setPieces(newPieces);
-    setSelectedIndex(null);
-    checkSolved(newPieces);
+    setPieces(shuffled);
+    setSelected([]);
+    setCompleted(false);
   };
 
   const handlePieceClick = (index) => {
-    if (isSolved) return;
-    if (selectedIndex === null) {
-      setSelectedIndex(index);
-      return;
+    if (completed) return;
+
+    const updated = [...selected, index];
+    setSelected(updated);
+
+    if (updated.length === 2) {
+      const [first, second] = updated;
+
+      const newPieces = [...pieces];
+
+      [newPieces[first], newPieces[second]] = [
+        newPieces[second],
+        newPieces[first],
+      ];
+
+      setPieces(newPieces);
+      setSelected([]);
     }
-    if (selectedIndex === index) {
-      setSelectedIndex(null);
-      return;
-    }
-    swapPieces(selectedIndex, index);
   };
 
-  const solveForTesting = () => {
-    setPieces(solvedPieces);
-    setIsSolved(true);
-    confetti({ particleCount: 120, spread: 80, origin: { y: 0.65 } });
+  const checkPuzzle = () => {
+    const solved = pieces.every(
+      (piece, idx) => piece === idx
+    );
+
+    if (solved) {
+      setCompleted(true);
+    } else {
+      alert(
+        "Botas says this is NOT correct 😾"
+      );
+    }
   };
 
   return (
     <section className="screen">
       <div className="glass-card">
-        <p className="eyebrow">Level 1</p>
-        <h2>Boots' Puzzle</h2>
-        <p>
-          Boots is guarding the next part of the mission. Put his picture back
-          together to continue.
-        </p>
 
-        <div className="puzzle-board">
-          {pieces.map((pieceNumber, index) => {
-            const row = Math.floor(pieceNumber / GRID_SIZE);
-            const col = pieceNumber % GRID_SIZE;
+        <p className="eyebrow">LEVEL 1</p>
 
-            return (
+        <h2>Botas Security Check 😺</h2>
+
+        {!completed ? (
+          <>
+            <p>
+              Botas is protecting the next level.
+              <br />
+              Rebuild his picture to prove you deserve access 😌
+            </p>
+
+            <div className="puzzle-board">
+              {pieces.map((piece, index) => {
+                const row = Math.floor(piece / 4);
+                const col = piece % 4;
+
+                return (
+                  <button
+                    key={index}
+                    className={`puzzle-piece ${
+                      selected.includes(index)
+                        ? "selected"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handlePieceClick(index)
+                    }
+                    style={{
+                      backgroundImage:
+                        "url('/images/boots.jpeg')",
+
+                      backgroundSize: "400% 500%",
+
+                      backgroundPosition: `
+                        ${(col / 3) * 100}% 
+                        ${(row / 4) * 100}%
+                      `,
+
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  />
+                );
+              })}
+            </div>
+
+            <p className="small-note">
+              Tap two pieces to swap them.
+            </p>
+
+            <div className="puzzle-buttons">
+
               <button
-                key={`${pieceNumber}-${index}`}
-                className={`puzzle-piece ${
-                  selectedIndex === index ? "selected" : ""
-                }`}
-                style={{
-                  backgroundImage: "url('/images/boots.jpg')",
-                  backgroundPosition: `${(col / (GRID_SIZE - 1)) * 100}% ${
-                    (row / (5 - 1)) * 100
-                  }%`,
-                }}
-                onClick={() => handlePieceClick(index)}
-                aria-label={`Puzzle piece ${index + 1}`}
-              />
-            );
-          })}
-        </div>
+                className="primary-button"
+                onClick={checkPuzzle}
+              >
+                Check Puzzle
+              </button>
 
-        <p className="hint">
-          Tap one piece, then tap another one to swap them. This is easier than
-          dragging and works great on phones too.
-        </p>
+              <button
+                className="secondary-button"
+                onClick={resetPuzzle}
+              >
+                Restart Puzzle
+              </button>
 
-        {!isSolved ? (
-          <button className="secondary-button" onClick={solveForTesting}>
-            Skip puzzle for testing
-          </button>
+              <button
+                className="skip-button"
+                onClick={onNext}
+              >
+                Princess Pass ✨
+              </button>
+
+            </div>
+          </>
         ) : (
           <div className="success-box">
-            <p>Boots approves this relationship.</p>
-            <button className="primary-button" onClick={onNext}>
-              Continue
+
+            <h2>Mission Complete ✨</h2>
+
+            <p>
+              Botas has officially approved this relationship 🐾
+            </p>
+
+            <button
+              className="primary-button"
+              onClick={onNext}
+            >
+              Continue Adventure
             </button>
+
           </div>
         )}
+
       </div>
     </section>
   );
 }
 
-export default PuzzleBoots;
+export default PuzzleBotas;

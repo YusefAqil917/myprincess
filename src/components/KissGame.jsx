@@ -31,14 +31,14 @@ function KissGame({ onNext }) {
           </div>
 
           <div className="cheek-zone" onDragOver={allowDrop} onDrop={handleDrop}>
-            <img src="/images/my-cheek.jpg" alt="My cheek" />
+            <img src="/images/my-cheek.jpeg" alt="My cheek" />
             <span>Drop the kiss here</span>
           </div>
         </div>
 
         {kissed && (
           <div className="success-box">
-            <img className="happy-photo" src="/images/me-happy.jpg" alt="Me happy" />
+            <img className="happy-photo" src="/images/me-happy.jpeg" alt="Me happy" />
             <p>Now I am happy again.</p>
             <button className="primary-button" onClick={onNext}>
               Continue

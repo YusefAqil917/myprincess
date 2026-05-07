@@ -1,58 +1,79 @@
-import { useState } from "react";
-import confetti from "canvas-confetti";
+import { useRef, useState } from "react";
 
 function FinalGift() {
-  const [ticketsPlaced, setTicketsPlaced] = useState(0);
-  const isOpen = ticketsPlaced >= 2;
+  const [tickets, setTickets] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const audioRef = useRef(null);
 
-  const placeTicket = () => {
-    setTicketsPlaced((current) => {
-      const next = Math.min(current + 1, 2);
-      if (next === 2) {
-        setTimeout(() => {
-          confetti({ particleCount: 220, spread: 110, origin: { y: 0.6 } });
-        }, 250);
-      }
-      return next;
-    });
+  const addTicket = () => {
+    const nextTickets = Math.min(tickets + 1, 2);
+    setTickets(nextTickets);
+
+    if (nextTickets === 2) {
+      setRevealed(true);
+
+      setTimeout(() => {
+        audioRef.current?.play();
+      }, 500);
+    }
   };
 
   return (
-    <section className="screen final-screen">
-      <div className="glass-card final-card">
-        <p className="eyebrow">The final gift</p>
+    <section className="screen">
+      <div className="glass-card">
+        <p className="eyebrow">THE FINAL GIFT</p>
+
         <h2>Your Surprise</h2>
-        <p>Place the two tickets inside the box to reveal your present.</p>
+
+        <p>
+          Place the two tickets inside the box to reveal your present.
+        </p>
+
+        <audio
+          ref={audioRef}
+          src="/music/kapo-song.mp3"
+        />
 
         <div className="tickets-row">
           <button
-            className={`ticket ${ticketsPlaced >= 1 ? "used" : ""}`}
-            onClick={placeTicket}
-            disabled={ticketsPlaced >= 1}
+            className={`ticket ${tickets >= 1 ? "used" : ""}`}
+            onClick={addTicket}
+            disabled={tickets >= 1}
           >
             Ticket 1
           </button>
+
           <button
-            className={`ticket ${ticketsPlaced >= 2 ? "used" : ""}`}
-            onClick={placeTicket}
-            disabled={ticketsPlaced >= 2 || ticketsPlaced < 1}
+            className={`ticket ${tickets >= 2 ? "used" : ""}`}
+            onClick={addTicket}
+            disabled={tickets < 1 || tickets >= 2}
           >
             Ticket 2
           </button>
         </div>
 
-        <p className="hint">Tickets placed: {ticketsPlaced}/2</p>
-
-        <div className={`gift-box ${isOpen ? "open" : ""}`}>
+        <div className={revealed ? "gift-box open" : "gift-box"}>
           <div className="box-lid"></div>
           <div className="box-body"></div>
         </div>
 
-        {isOpen && (
+        {revealed && (
           <div className="reveal-card">
-            <h1>We are going to Kapo's concert</h1>
-            <p>Two tickets, one night, and a memory we will never forget.</p>
-            <p className="small-note">I love you, princess.</p>
+            <h1>We are going to Kapo&apos;s concert</h1>
+
+            <p>
+              Two tickets, one night, and a memory we will never forget.
+            </p>
+
+            <img
+              className="song-image"
+              src="/images/song2.jpeg"
+              alt="Kapo song reveal"
+            />
+
+            <p className="small-note">
+              I love you, princess.
+            </p>
           </div>
         )}
       </div>

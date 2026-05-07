@@ -1,90 +1,116 @@
 import { useRef, useState } from "react";
-import confetti from "canvas-confetti";
-
-const ACCEPTED_ANSWERS = [
-  "song name",
-  "nombre de la cancion",
-  "nombre de la canción"
-];
-
-function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim();
-}
 
 function GuessSong({ onNext }) {
   const [answer, setAnswer] = useState("");
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [message, setMessage] = useState("");
+  const [correct, setCorrect] = useState(false);
+
   const audioRef = useRef(null);
 
-  const checkAnswer = async () => {
-    const normalizedAnswer = normalizeText(answer);
-    const isMatch = ACCEPTED_ANSWERS.some(
-      (acceptedAnswer) => normalizeText(acceptedAnswer) === normalizedAnswer
-    );
+  const checkAnswer = () => {
+    const formatted = answer
+      .toLowerCase()
+      .trim();
 
-    if (!isMatch) {
-      setMessage("Mmm, not yet. Think about the song that feels like you.");
-      return;
-    }
+    if (
+      formatted === "risk it all" ||
+      formatted === "risk it all by bruno mars"
+    ) {
+      setCorrect(true);
 
-    setIsCorrect(true);
-    setMessage("Correct, princess.");
-    confetti({ particleCount: 140, spread: 90, origin: { y: 0.65 } });
-
-    try {
-      await audioRef.current.play();
-    } catch {
-      setMessage("Correct, princess. Press play if the song does not start automatically.");
+      setTimeout(() => {
+        audioRef.current.play();
+      }, 300);
+    } else {
+      alert(
+        "Hmmmm... that doesn't sound right 😌"
+      );
     }
   };
 
   return (
-    <section className="screen song-screen">
+    <section className="screen">
       <div className="glass-card">
-        <p className="eyebrow">Level 2</p>
-        <h2>Guess the Song</h2>
-        <p>These lyrics belong to a song that reminds me of you.</p>
 
-        <div className="lyrics-box">
-          <p>“Lyric phrase number one...”</p>
-          <p>“Lyric phrase number two...”</p>
-          <p>“Lyric phrase number three...”</p>
-        </div>
+        <p className="eyebrow">LEVEL 2</p>
 
-        <input
-          type="text"
-          value={answer}
-          placeholder="Write the song name here"
-          onChange={(event) => setAnswer(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") checkAnswer();
-          }}
-        />
+        <h2>Our Song 🎶</h2>
 
-        <button className="primary-button" onClick={checkAnswer}>
-          Check answer
-        </button>
+        {!correct ? (
+          <>
+            <p>
+              This song reminds me of you every single time.
+              <br />
+              Can you guess it?
+            </p>
 
-        {message && <p className="feedback-message">{message}</p>}
+            <div className="lyrics-box">
 
-        <audio ref={audioRef} src="/music/song.mp3" controls={isCorrect} />
+              <p>
+                “Would you risk it all?”
+              </p>
 
-        {isCorrect && (
-          <div className="song-reveal">
-            <div className="mini-gallery">
-              <img src="/images/song1.jpg" alt="Memory 1" />
-              <img src="/images/song2.jpg" alt="Memory 2" />
+              <p>
+                “Even if I break and fall...”
+              </p>
+
+              <p>
+                “I would risk it all for you...”
+              </p>
+
             </div>
-            <button className="primary-button" onClick={onNext}>
-              Continue
+
+            <input
+              type="text"
+              placeholder="Type the song name..."
+              value={answer}
+              onChange={(e) =>
+                setAnswer(e.target.value)
+              }
+            />
+
+            <br />
+
+            <button
+              className="primary-button"
+              onClick={checkAnswer}
+            >
+              Check Song
             </button>
+          </>
+        ) : (
+          <div className="song-reveal">
+
+            <h2>You got it 💖</h2>
+
+            <p>
+              Risk It All — Bruno Mars
+            </p>
+
+            <audio
+              controls
+              autoPlay
+              ref={audioRef}
+              src="/music/risk-it-all.mp3"
+            />
+
+            <div className="mini-gallery">
+
+              <img src="/images/welcome1.jpeg" />
+              <img src="/images/welcome5.jpeg" />
+              <img src="/images/welcome9.jpeg" />
+
+            </div>
+
+            <button
+              className="primary-button"
+              onClick={onNext}
+            >
+              Continue Adventure
+            </button>
+
           </div>
         )}
+
       </div>
     </section>
   );

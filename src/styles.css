@@ -20,11 +20,102 @@ body {
     linear-gradient(135deg, #ffd0e7, #fff4fb 45%, #ffc1dd);
 }
 
-button,
-input {
-  font: inherit;
+.welcome {
+  justify-content: flex-start;
+  padding-top: 50px;
 }
 
+.welcome-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.welcome-header h1 {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.welcome-header p {
+  text-align: center;
+  max-width: 700px;
+  margin-bottom: 0;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 210px);
+  gap: 22px;
+  justify-content: center;
+  margin: 20px auto 50px;
+}
+
+.photo-grid img {
+  width: 210px;
+  height: 250px;
+  object-fit: cover;
+
+  border: 8px solid white;
+  border-radius: 26px;
+
+  box-shadow:
+    0 18px 34px rgba(71, 33, 57, 0.22),
+    0 0 18px rgba(255, 182, 193, 0.15);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.photo-grid img:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow:
+    0 24px 40px rgba(71, 33, 57, 0.28),
+    0 0 24px rgba(255, 182, 193, 0.28);
+}
+
+.photo-grid img:nth-child(odd) {
+  transform: rotate(-2deg);
+}
+
+.photo-grid img:nth-child(even) {
+  transform: rotate(2deg);
+}
+
+.photo-grid img:hover {
+  transform: translateY(-6px) scale(1.03) rotate(0deg);
+}
+
+button {
+  margin: 0 auto 60px;
+
+  padding: 16px 36px;
+  border: none;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #ff6fae, #ff8fc7);
+
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 25px rgba(255, 105, 180, 0.35),
+    0 0 20px rgba(255, 182, 193, 0.25);
+
+  transition: all 0.25s ease;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.03);
+
+  box-shadow:
+    0 14px 35px rgba(255, 105, 180, 0.45),
+    0 0 25px rgba(255, 182, 193, 0.35);
+}
 .app {
   min-height: 100vh;
   overflow-x: hidden;
@@ -184,7 +275,7 @@ button:disabled {
   padding: 0;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.75);
-  background-size: 400% 500%;
+  background-repeat: no-repeat;
   cursor: pointer;
   box-shadow: none;
 }
@@ -416,4 +507,22 @@ audio {
   .puzzle-board {
     gap: 3px;
   }
+
+
+  .song-image {
+  width: min(420px, 90%);
+  margin: 24px auto 18px;
+  display: block;
+
+  border-radius: 26px;
+  border: 8px solid white;
+
+  object-fit: cover;
+
+  box-shadow:
+    0 18px 38px rgba(71, 33, 57, 0.22),
+    0 0 24px rgba(255, 182, 193, 0.28);
+
+  animation: popIn 0.6s ease both;
+}
 }
